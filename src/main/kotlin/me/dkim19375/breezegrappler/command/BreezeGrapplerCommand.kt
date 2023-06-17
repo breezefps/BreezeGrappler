@@ -22,15 +22,15 @@ import me.dkim19375.breezegrappler.BreezeGrappler
 import me.dkim19375.dkimbukkitcore.function.applyPAPI
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.Component.textOfChildren
-import net.kyori.adventure.text.format.NamedTextColor.GOLD
-import net.kyori.adventure.text.format.NamedTextColor.GREEN
-import net.kyori.adventure.text.format.NamedTextColor.RED
+import net.kyori.adventure.text.format.NamedTextColor.*
+import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.UUID
+import javax.swing.text.StyledEditorKit.BoldAction
 
 class BreezeGrapplerCommand(private val plugin: BreezeGrappler) : CommandExecutor {
     private val lastUsed = mutableMapOf<UUID, Long>()
@@ -50,11 +50,16 @@ class BreezeGrapplerCommand(private val plugin: BreezeGrappler) : CommandExecuto
         val timePassed = System.currentTimeMillis() - (lastUsed[sender.uniqueId] ?: 0)
         val min = plugin.mainConfig.get().commandCooldown * 1000L
         if (timePassed < min && !sender.hasPermission("breezegrappler.cooldown.bypass")) {
+            plugin.mainConfig.get().sounds.getFail.playSound(sender)
             sender.sendMessage(
                 textOfChildren(
-                    text("You must wait ", RED),
-                    text("${((min - timePassed) / 1000L)}s ", GOLD),
-                    text("before getting another grappling hook!", RED),
+                    text("\n", GOLD),
+                    text("Breeze ", GOLD, TextDecoration.BOLD),
+                    text("Grappler » ", WHITE, TextDecoration.BOLD),
+                    text("You need to wait more ", YELLOW),
+                    text("${((min - timePassed) / 1000L)} seconds ", RED),
+                    text("to get the Grappler item again.", YELLOW),
+                    text("\n", GOLD),
                 )
             )
             return true

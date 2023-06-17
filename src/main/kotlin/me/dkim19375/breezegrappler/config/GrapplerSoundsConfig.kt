@@ -38,4 +38,10 @@ data class GrapplerSoundsConfig(
         pitch = 1f,
         volume = 1f,
     ),
+    @SerialName("get-failed")
+    val getFail: GrapplerSoundConfig = GrapplerSoundConfig(
+        type = Sound.BLOCK_DISPENSER_FAIL,
+        pitch = 1f,
+        volume = 1f,
+    ),
 )
